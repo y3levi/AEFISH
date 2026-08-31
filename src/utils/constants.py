@@ -3,7 +3,7 @@ from pathlib import Path
 
 APP_NAME = "Anime Expeditions Auto Fishing"
 APP_DISPLAY_NAME = "anime expeditions\nauto fishing"
-APP_VERSION = "1.0.0"
+APP_VERSION = "1.1.0"
 APP_AUTHOR = "y3levi"
 
 # resolved runtime paths

@@ -140,17 +140,17 @@ def test_edge_margin_clamp():
     from src.core.controller import Controller, Action
     cfg = {
         "detection": {"deadzone": 10},
-        "controller": {"prediction": False, "smoothing": 0.0, "edge_margin": 15}
+        "controller": {"prediction": False, "smoothing": 0.0}
     }
     ctrl = Controller(cfg)
     
-    # zone_left <= 15 -> forced hold
-    action = ctrl.update(fish_x=5, zone_left=10, zone_right=80, timestamp=1.0)
+    # target right of zone
+    action = ctrl.update(fish_x=90, zone_left=10, zone_right=80, timestamp=1.0)
     assert action == Action.HOLD
     
     ctrl.reset()
     
-    # zone_left > 15 -> normal logic
+    # target left of zone
     action = ctrl.update(fish_x=5, zone_left=20, zone_right=80, timestamp=1.1)
     assert action == Action.RELEASE
 
@@ -219,6 +219,34 @@ def test_aspect_ratio_filter():
     frame[40:50, 40:50] = 255
     res = det.detect(frame)
     assert res.fish_detected
+
+
+def test_config_path_frozen_writable(tmp_path, monkeypatch):
+    from src.app.application import _resolve_config_path
+    exe = tmp_path / "AEFISH.exe"
+    exe.write_bytes(b"")
+    monkeypatch.setattr(sys, "frozen", True, raising=False)
+    monkeypatch.setattr(sys, "executable", str(exe))
+    assert _resolve_config_path() == str(tmp_path / "config.json")
+
+
+def test_config_path_frozen_readonly_falls_back_to_appdata(tmp_path, monkeypatch):
+    import src.app.application as app_mod
+    exe_dir = tmp_path / "program_files"
+    exe_dir.mkdir()
+    appdata = tmp_path / "appdata"
+    monkeypatch.setattr(sys, "frozen", True, raising=False)
+    monkeypatch.setattr(sys, "executable", str(exe_dir / "AEFISH.exe"))
+    monkeypatch.setenv("APPDATA", str(appdata))
+    # simulate an unwritable install dir (e.g. Program Files)
+    real_open = open
+    def deny_probe(file, *args, **kwargs):
+        if str(file).endswith(".write_probe"):
+            raise PermissionError("read-only dir")
+        return real_open(file, *args, **kwargs)
+    monkeypatch.setattr("builtins.open", deny_probe)
+    assert app_mod._resolve_config_path() == str(appdata / "AEFISH" / "config.json")
+    assert (appdata / "AEFISH").is_dir()
 
 
 def test_simple_rod_mode(tmp_path):

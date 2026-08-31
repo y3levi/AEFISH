@@ -1,7 +1,7 @@
 # -*- mode: python ; coding: utf-8 -*-
 from PyInstaller.utils.hooks import collect_data_files
 
-datas = [('src/config/profiles', 'src/config/profiles'), ('src/locales', 'src/locales'), ('assets', 'assets'), ('config.json', '.')]
+datas = [('src/config/profiles', 'src/config/profiles'), ('src/locales', 'src/locales'), ('assets', 'assets')]
 datas += collect_data_files('customtkinter')
 
 
@@ -26,7 +26,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='Anime_Expeditions_Auto_Fishing',
+    name='AEFISH',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -39,5 +39,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['assets/Toki1ICO.ico'],
+    icon=['C:/Users/Walter/Desktop/trabalho do yago/AEFISH/assets/Toki1ICO.ico'],
 )

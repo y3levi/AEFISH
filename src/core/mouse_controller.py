@@ -25,14 +25,24 @@ class MouseController:
     def _press(self) -> None:
         with self._lock:
             if not self._mouse_down:
-                self._mouse.press(Button.left)
+                try:
+                    import ctypes
+                    # MOUSEEVENTF_LEFTDOWN = 0x0002
+                    ctypes.windll.user32.mouse_event(0x0002, 0, 0, 0, 0)
+                except Exception as e:
+                    logger.error(f"ctypes press error: {e}")
                 self._mouse_down = True
                 logger.debug("Mouse: PRESS")
 
     def _release(self) -> None:
         with self._lock:
             if self._mouse_down:
-                self._mouse.release(Button.left)
+                try:
+                    import ctypes
+                    # MOUSEEVENTF_LEFTUP = 0x0004
+                    ctypes.windll.user32.mouse_event(0x0004, 0, 0, 0, 0)
+                except Exception as e:
+                    logger.error(f"ctypes release error: {e}")
                 self._mouse_down = False
                 logger.debug("Mouse: RELEASE")
 
@@ -40,7 +50,8 @@ class MouseController:
         """Unconditionally release mouse. Safe to call multiple times."""
         with self._lock:
             try:
-                self._mouse.release(Button.left)
+                import ctypes
+                ctypes.windll.user32.mouse_event(0x0004, 0, 0, 0, 0)
             except Exception as e:
                 logger.error(f"Emergency release error: {e}")
             finally:

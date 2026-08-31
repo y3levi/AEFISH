@@ -13,15 +13,40 @@ from src.ui.main_window import MainWindow
 from src.ui.settings_window import SettingsWindow
 from src.ui.calibration_overlay import CalibrationOverlay, WaterCalibrationOverlay
 from src.ui.debug_window import DebugWindow
+from src.ui import design_system as ds
 from src.utils.logger import get_logger, setup_logging
 from src.utils.constants import APP_NAME, APP_VERSION, HOTKEY_DEBOUNCE_S
 from src.utils import localization as _loc
 
 logger = get_logger('application')
 
+
+def _resolve_config_path() -> str:
+    """config.json lives next to the exe when frozen, else next to the project.
+
+    Falls back to %APPDATA%/AEFISH when the exe folder is not writable
+    (e.g. installed under Program Files).
+    """
+    if not getattr(sys, 'frozen', False):
+        return 'config.json'
+    from pathlib import Path
+    exe_dir = Path(sys.executable).parent
+    try:
+        probe = exe_dir / '.write_probe'
+        with open(probe, 'w'):
+            pass
+        probe.unlink()
+        return str(exe_dir / 'config.json')
+    except OSError:
+        appdata = Path(os.environ.get('APPDATA', str(Path.home()))) / 'AEFISH'
+        appdata.mkdir(parents=True, exist_ok=True)
+        return str(appdata / 'config.json')
+
+
 class Application:
     def __init__(self) -> None:
-        self._config = ConfigManager('config.json')
+        self._is_shutting_down = False
+        self._config = ConfigManager(_resolve_config_path())
         
         lang = self._config.get("ui", "language", default="en")
         _loc.load(lang)
@@ -53,7 +78,7 @@ class Application:
         if always_on_top:
             self._window.after(100, lambda: self._window.wm_attributes("-topmost", True))
             
-        self._window.after(200, lambda: self._window.iconbitmap(os.path.join('assets', 'Toki1ICO.ico')))
+        self._window.after(200, lambda: self._window.iconbitmap(ds.ICON_MAIN))
             
         water_pos = self._calibration.get_water_position()
         if water_pos:
@@ -81,13 +106,29 @@ class Application:
 
     def shutdown(self) -> None:
         """clean shutdown."""
+        if getattr(self, '_is_shutting_down', False):
+            return
+        self._is_shutting_down = True
         logger.info('shutting down')
-        self._engine.emergency_stop()
-        self._stop_hotkeys()
-        self._debug_window.stop()
+        try:
+            self._engine.emergency_stop()
+        except Exception:
+            pass
+        try:
+            self._stop_hotkeys()
+        except Exception:
+            pass
+        try:
+            self._debug_window.stop()
+        except Exception:
+            pass
         logger.info('shutdown complete')
-        if hasattr(self, '_window') and self._window.winfo_exists():
-            self._window.destroy()
+        if hasattr(self, '_window') and self._window:
+            try:
+                if self._window.winfo_exists():
+                    self._window.destroy()
+            except Exception:
+                pass
 
     def _toggle_fishing(self) -> None:
         if self._engine.is_running():
