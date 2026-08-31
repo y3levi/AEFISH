@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Anime Expeditions Auto Fishing"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "1.1.0"
 #define MyAppPublisher "y3levi"
 #define MyAppExeName "AEFISH.exe"
 
@@ -16,8 +16,7 @@ DefaultDirName={autopf}\{#MyAppName}
 DisableProgramGroupPage=yes
 LicenseFile=LICENSE
 OutputDir=installer_output
-OutputBaseFilename=Anime_Expeditions_Auto_Fishing_Setup_v1.0.0
-SetupIconFile=assets\Toki1ICO.ico
+OutputBaseFilename=Anime_Expeditions_Auto_Fishing_Setup_v{#MyAppVersion}
 Compression=lzma2/ultra64
 SolidCompression=yes
 WizardStyle=modern
@@ -29,7 +28,9 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "dist\Anime_Expeditions_Auto_Fishing\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+; onefile build: a single portable exe (the app writes its config.json to
+; %APPDATA%\AEFISH when the install folder is not writable)
+Source: "dist\AEFISH.exe"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

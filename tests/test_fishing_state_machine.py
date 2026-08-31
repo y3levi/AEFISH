@@ -221,6 +221,34 @@ def test_aspect_ratio_filter():
     assert res.fish_detected
 
 
+def test_config_path_frozen_writable(tmp_path, monkeypatch):
+    from src.app.application import _resolve_config_path
+    exe = tmp_path / "AEFISH.exe"
+    exe.write_bytes(b"")
+    monkeypatch.setattr(sys, "frozen", True, raising=False)
+    monkeypatch.setattr(sys, "executable", str(exe))
+    assert _resolve_config_path() == str(tmp_path / "config.json")
+
+
+def test_config_path_frozen_readonly_falls_back_to_appdata(tmp_path, monkeypatch):
+    import src.app.application as app_mod
+    exe_dir = tmp_path / "program_files"
+    exe_dir.mkdir()
+    appdata = tmp_path / "appdata"
+    monkeypatch.setattr(sys, "frozen", True, raising=False)
+    monkeypatch.setattr(sys, "executable", str(exe_dir / "AEFISH.exe"))
+    monkeypatch.setenv("APPDATA", str(appdata))
+    # simulate an unwritable install dir (e.g. Program Files)
+    real_open = open
+    def deny_probe(file, *args, **kwargs):
+        if str(file).endswith(".write_probe"):
+            raise PermissionError("read-only dir")
+        return real_open(file, *args, **kwargs)
+    monkeypatch.setattr("builtins.open", deny_probe)
+    assert app_mod._resolve_config_path() == str(appdata / "AEFISH" / "config.json")
+    assert (appdata / "AEFISH").is_dir()
+
+
 def test_simple_rod_mode(tmp_path):
     cfg = ConfigManager(tmp_path / "config.json")
     

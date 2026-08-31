@@ -20,10 +20,33 @@ from src.utils import localization as _loc
 
 logger = get_logger('application')
 
+
+def _resolve_config_path() -> str:
+    """config.json lives next to the exe when frozen, else next to the project.
+
+    Falls back to %APPDATA%/AEFISH when the exe folder is not writable
+    (e.g. installed under Program Files).
+    """
+    if not getattr(sys, 'frozen', False):
+        return 'config.json'
+    from pathlib import Path
+    exe_dir = Path(sys.executable).parent
+    try:
+        probe = exe_dir / '.write_probe'
+        with open(probe, 'w'):
+            pass
+        probe.unlink()
+        return str(exe_dir / 'config.json')
+    except OSError:
+        appdata = Path(os.environ.get('APPDATA', str(Path.home()))) / 'AEFISH'
+        appdata.mkdir(parents=True, exist_ok=True)
+        return str(appdata / 'config.json')
+
+
 class Application:
     def __init__(self) -> None:
         self._is_shutting_down = False
-        self._config = ConfigManager('config.json')
+        self._config = ConfigManager(_resolve_config_path())
         
         lang = self._config.get("ui", "language", default="en")
         _loc.load(lang)

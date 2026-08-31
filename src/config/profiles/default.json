@@ -1,26 +1,30 @@
 {
     "profile_name": "anime_expeditions_default",
-    "version": "1.0",
+    "version": "1.1",
     "description": "Default detection profile for Anime Expeditions fishing minigame",
 
     "fish_detection": {
         "enabled": true,
-        "comment": "White/bright indicator dot on the fishing bar",
-        "hsv_lower": [0, 0, 200],
-        "hsv_upper": [180, 40, 255],
-        "min_area": 2,
-        "max_area": 3000,
-        "min_aspect_ratio": 0.1,
-        "max_aspect_ratio": 3.0
+        "comment": "Fish icon has TWO states: light blue while free (hsv_lower/upper) and white with a bold outline while the zone touches it (hover_hsv_lower/upper). Both masks are OR-ed",
+        "hsv_lower": [85, 30, 140],
+        "hsv_upper": [120, 170, 255],
+        "hover_enabled": true,
+        "hover_hsv_lower": [0, 0, 200],
+        "hover_hsv_upper": [180, 60, 255],
+        "min_area": 10,
+        "max_area": 2500,
+        "min_aspect_ratio": 0.5,
+        "max_aspect_ratio": 2.5
     },
 
     "zone_detection": {
         "enabled": true,
-        "comment": "Blue controllable zone on the fishing bar",
-        "hsv_lower": [95, 80, 60],
-        "hsv_upper": [135, 255, 255],
-        "min_area": 10,
-        "max_area": 50000
+        "comment": "Bright saturated blue zone fill: high V lower bound excludes the dark bar background; close_kernel must be wider than the fish icon",
+        "hsv_lower": [90, 175, 130],
+        "hsv_upper": [125, 255, 255],
+        "min_area": 100,
+        "max_area": 50000,
+        "close_kernel": [25, 3]
     },
 
     "controller": {

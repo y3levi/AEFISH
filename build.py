@@ -12,11 +12,13 @@ DIST_DIR = "dist"
 BUILD_DIR = "build"
 
 # data files
+# NOTE: config.json is intentionally NOT bundled — the app creates a fresh
+# default one next to the exe on first run (bundling would ship the
+# developer's personal calibration)
 DATAS = [
     ("src/config/profiles", "src/config/profiles"),
     ("src/locales", "src/locales"),
     ("assets", "assets"),
-    ("config.json", "."),
 ]
 
 # hidden imports

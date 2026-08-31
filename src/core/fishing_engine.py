@@ -275,6 +275,7 @@ class FishingEngine:
         recast_cooldown_s = float(self._cfg.get("capture", "recast_cooldown_s", default=1.5))
         confidence_threshold = float(self._cfg.get("detection", "confidence_threshold", default=0.6))
         fish_lost_timeout_s = float(self._cfg.get("detection", "fish_lost_timeout_ms", default=1500)) / 1000.0
+        lost_grace_s = float(self._cfg.get("detection", "lost_target_timeout_ms", default=500)) / 1000.0
         simple_rod = bool(self._cfg.get("capture", "simple_rod_mode", default=False))
 
         # starting phase
@@ -361,10 +362,14 @@ class FishingEngine:
                         self._last_action = action
                         self._mouse.apply(action)
                     else:
+                        now = time.monotonic()
                         if fish_lost_since is None:
-                            fish_lost_since = time.monotonic()
+                            fish_lost_since = now
+                        # grace period: keep the last mouse state through short
+                        # detection dropouts (e.g. UI flicker over the bar)
+                        if now - fish_lost_since > lost_grace_s:
                             self._mouse.apply(Action.RELEASE)
-                        elif time.monotonic() - fish_lost_since > fish_lost_timeout_s:
+                        if now - fish_lost_since > fish_lost_timeout_s:
                             logger.info("fishing ended")
                             self._mouse.emergency_release()
                             self._controller.reset()

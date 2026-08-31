@@ -25,10 +25,11 @@ funciona com as varas convencionais e com a **AUTOROD** (é só uma tag).
 
 ### como usar
 
-1. baixa o instalador na aba de [releases](../../releases)
-2. instala e abre o **AEFISH**
-3. escolhe o modo de pesca
-4. deixa rodando e vai fazer outra coisa
+1. baixa o **AEFISH.exe** na aba de [releases](../../releases)
+2. abre o exe (não precisa instalar nada)
+3. calibra a barra do minigame em **Calibrate Bar** (seleciona a faixa escura onde o peixe aparece) e marca a posição da água
+4. escolhe o modo de pesca e aperta **F6**
+5. deixa rodando e vai fazer outra coisa (**F7** para de emergência)
 
 tem uma tela de configurações lá dentro também, pra ajustar o que precisar.
 
@@ -61,10 +62,11 @@ works with the regular rods and with **AUTOROD** (just a tag).
 
 ### how to use
 
-1. download the installer from the [releases](../../releases) tab
-2. install it and open **AEFISH**
-3. pick your fishing mode
-4. let it run and go do something else
+1. download **AEFISH.exe** from the [releases](../../releases) tab
+2. open the exe (no install needed)
+3. calibrate the minigame bar in **Calibrate Bar** (select the dark strip where the fish appears) and mark the water position
+4. pick your fishing mode and press **F6**
+5. let it run and go do something else (**F7** is the emergency stop)
 
 there's also a settings screen inside, to tweak whatever you need.
 
