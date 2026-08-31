@@ -33,7 +33,7 @@ funciona com as varas convencionais e com a **AUTOROD** (é só uma tag).
 tem uma tela de configurações lá dentro também, pra ajustar o que precisar.
 
 <p align="center">
-  <img src="assets/PRINT.png" alt="menu principal" width="80%">
+  <img src="assets/PRINT.png" alt="menu principal" width="320">
 </p>
 
 > pode rodar direto, sem frescura. não precisa entender nada de tecnologia pra usar.
@@ -69,7 +69,7 @@ works with the regular rods and with **AUTOROD** (just a tag).
 there's also a settings screen inside, to tweak whatever you need.
 
 <p align="center">
-  <img src="assets/PRINT.png" alt="main menu" width="80%">
+  <img src="assets/PRINT.png" alt="main menu" width="200">
 </p>
 
 > just run it, no need to overthink it.
