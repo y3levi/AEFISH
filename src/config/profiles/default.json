@@ -1,0 +1,34 @@
+{
+    "profile_name": "anime_expeditions_default",
+    "version": "1.0",
+    "description": "Default detection profile for Anime Expeditions fishing minigame",
+
+    "fish_detection": {
+        "enabled": true,
+        "comment": "White/bright indicator dot on the fishing bar",
+        "hsv_lower": [0, 0, 200],
+        "hsv_upper": [180, 40, 255],
+        "min_area": 2,
+        "max_area": 3000,
+        "min_aspect_ratio": 0.1,
+        "max_aspect_ratio": 3.0
+    },
+
+    "zone_detection": {
+        "enabled": true,
+        "comment": "Blue controllable zone on the fishing bar",
+        "hsv_lower": [95, 80, 60],
+        "hsv_upper": [135, 255, 255],
+        "min_area": 10,
+        "max_area": 50000
+    },
+
+    "controller": {
+        "deadzone": 10,
+        "prediction": true,
+        "smoothing": 0.9,
+        "history_size": 8,
+        "prediction_lookahead_ms": 50,
+        "edge_margin": 15
+    }
+}

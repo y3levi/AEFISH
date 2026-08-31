@@ -1,0 +1,101 @@
+{
+    "app.title": "anime expeditions",
+    "app.subtitle": "auto fishing",
+    "app.author": "por y3levi",
+
+    "btn.start": "▶  Iniciar Pesca",
+    "btn.stop": "⏹  Parar",
+    "btn.settings": "⚙  Configurações",
+    "btn.calibrate_bar": "✛  Calibrar Barra",
+    "btn.calibrate_water": "⊕  Calibrar Água",
+
+    "label.detection": "Detecção",
+    "label.region_none": "Barra: não calibrada",
+    "label.region_set": "Barra: {width}×{height}",
+    "label.water_none": "Água: não configurada",
+    "label.water_set": "Água: ({x}, {y})",
+
+    "hotkey.toggle": "Iniciar / Parar:",
+    "hotkey.emergency": "Emergência:",
+
+    "status.idle": "Aguardando",
+    "status.waiting_for_game": "Aguardando o Jogo",
+    "status.calibrating": "Calibrando",
+    "status.casting": "Lançando...",
+    "status.waiting_for_minigame": "Aguardando Minigame",
+    "status.detecting": "Detectando Barra",
+    "status.fishing": "Pescando",
+    "status.recast": "Relançando...",
+    "status.paused": "Pausado",
+    "status.error": "Erro",
+
+    "settings.title": "Configurações — AE Auto Fishing",
+    "settings.tab.basic": "Básico",
+    "settings.tab.advanced": "Avançado",
+
+    "settings.section.general": "Geral",
+    "settings.general.language": "Idioma",
+    "settings.general.always_on_top": "Sempre no Topo",
+
+    "settings.section.fishing": "Pesca",
+    "settings.fishing.calibrate_bar": "Recalibrar Barra de Pesca",
+    "settings.fishing.calibrate_water": "Recalibrar Posição da Água",
+    "settings.fishing.recast_timeout": "Timeout de Relançamento (s)",
+    "settings.fishing.recast_timeout_desc": "Segundos aguardando antes de relançar se nada acontecer.",
+    "settings.fishing.simple_rod": "Modo AutoRod",
+    "settings.fishing.simple_rod_desc": "Para a AutoRod (sem minigame)",
+
+    "settings.section.hotkeys": "Teclas de Atalho",
+    "settings.hotkeys.toggle": "Iniciar / Parar",
+    "settings.hotkeys.emergency": "Parada de Emergência",
+
+    "settings.section.debug": "Debug",
+    "settings.debug.enable": "Ativar Janela de Debug",
+
+    "settings.section.detection": "Detecção",
+    "settings.detection.fps": "FPS de Captura",
+    "settings.detection.fps_desc": "Taxa de captura de tela.",
+    "settings.detection.confidence": "Limiar de Confiança",
+    "settings.detection.confidence_desc": "Confiança mínima para considerar algo detectado.",
+    "settings.detection.lost_timeout": "Timeout de Alvo Perdido (ms)",
+    "settings.detection.lost_timeout_desc": "Tempo sem detecção antes de resetar.",
+    "settings.detection.fish_lost_timeout": "Timeout de Peixe Perdido (ms)",
+    "settings.detection.fish_lost_timeout_desc": "Tempo que a barra precisa sumir para a pesca resetar.",
+
+    "settings.section.controller": "Ajuste do Controlador",
+    "settings.controller.deadzone": "Zona Morta (px)",
+    "settings.controller.deadzone_desc": "Faixa de movimento ignorada próxima ao centro.",
+    "settings.controller.prediction": "Ativar Previsão",
+    "settings.controller.prediction_desc": "Prevê para onde o peixe está indo.",
+    "settings.controller.smoothing": "Suavização",
+    "settings.controller.smoothing_desc": "Reduz variações bruscas no controlador.",
+
+    "settings.section.adv_debug": "Debug Avançado",
+    "settings.adv_debug.show_masks": "Mostrar Máscaras de Detecção",
+    "settings.adv_debug.show_masks_desc": "Exibe as máscaras de cor brutas do sistema de visão.",
+
+    "settings.section.diagnostics": "Diagnósticos",
+    "settings.diagnostics.test_mouse": "Testar Entrada do Mouse",
+    "settings.diagnostics.test_mouse_desc": "Simula um clique para verificar se o mouse está funcionando.",
+    "settings.diagnostics.result_ok": "✓  Mouse OK",
+    "settings.diagnostics.result_fail": "✗  Falha no mouse",
+
+    "settings.advanced_warning": "Configurações avançadas — configs padrões são recomendadas.",
+
+    "btn.save": "Salvar",
+    "btn.cancel": "Cancelar",
+
+    "calib.bar.instruction": "Clique e arraste para selecionar a área da barra de pesca",
+    "calib.bar.detail": "Arraste o mouse para criar um retângulo ao redor do minigame de pesca.",
+    "calib.bar.esc": "Pressione ESC para cancelar",
+
+    "calib.water.instruction": "Clique na posição da água onde a vara deve ser lançada.",
+    "calib.water.detail": "Um único clique na posição exata da água onde o bot deve mirar.",
+    "calib.water.esc": "Pressione ESC para cancelar",
+
+    "msg.test_mouse_running": "Testando...",
+    "msg.not_calibrated_bar": "Calibre a barra de pesca primeiro.",
+    "msg.not_calibrated_water": "Posição da água não configurada — o bot não vai lançar automaticamente.",
+
+    "settings.basic.disclaimer": "criador: y3levi  •  discord: atelofear"
+}

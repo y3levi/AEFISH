@@ -1,0 +1,22 @@
+# Anime Expeditions Auto Fishing — Dependencies
+# Install with: pip install -r requirements.txt
+
+# Core UI
+customtkinter>=5.2.2
+
+# Screen capture
+mss>=9.0.1
+
+# Computer vision
+opencv-python>=4.9.0.80
+numpy>=1.26.0
+Pillow>=10.0.0
+
+# Mouse and keyboard control / global hotkeys
+pynput>=1.7.7
+
+# Testing
+pytest>=8.0.0
+
+# Build (optional, for packaging)
+# pyinstaller>=6.0.0

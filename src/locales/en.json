@@ -1,0 +1,101 @@
+{
+    "app.title": "anime expeditions",
+    "app.subtitle": "auto fishing",
+    "app.author": "by y3levi",
+
+    "btn.start": "▶  Start Fishing",
+    "btn.stop": "⏹  Stop",
+    "btn.settings": "⚙  Settings",
+    "btn.calibrate_bar": "✛  Calibrate Bar",
+    "btn.calibrate_water": "⊕  Calibrate Water",
+
+    "label.detection": "Detection",
+    "label.region_none": "Bar: not calibrated",
+    "label.region_set": "Bar: {width}×{height}",
+    "label.water_none": "Water: not set",
+    "label.water_set": "Water: ({x}, {y})",
+
+    "hotkey.toggle": "Start / Stop:",
+    "hotkey.emergency": "Emergency:",
+
+    "status.idle": "Idle",
+    "status.waiting_for_game": "Waiting for game",
+    "status.calibrating": "Calibrating",
+    "status.casting": "Casting...",
+    "status.waiting_for_minigame": "Waiting for minigame",
+    "status.detecting": "Detecting",
+    "status.fishing": "Fishing",
+    "status.recast": "Recasting...",
+    "status.paused": "Paused",
+    "status.error": "Error",
+
+    "settings.title": "Settings — AE Auto Fishing",
+    "settings.tab.basic": "Basic",
+    "settings.tab.advanced": "Advanced",
+
+    "settings.section.general": "General",
+    "settings.general.language": "Language",
+    "settings.general.always_on_top": "Always on Top",
+
+    "settings.section.fishing": "Fishing",
+    "settings.fishing.calibrate_bar": "Recalibrate Fishing Bar",
+    "settings.fishing.calibrate_water": "Recalibrate Water Position",
+    "settings.fishing.recast_timeout": "Recast Timeout (s)",
+    "settings.fishing.recast_timeout_desc": "Seconds to wait before recasting if nothing happens.",
+    "settings.fishing.simple_rod": "AutoRod Mode",
+    "settings.fishing.simple_rod_desc": "For the AutoRod (no minigame)",
+
+    "settings.section.hotkeys": "Hotkeys",
+    "settings.hotkeys.toggle": "Start / Stop",
+    "settings.hotkeys.emergency": "Emergency Stop",
+
+    "settings.section.debug": "Debug",
+    "settings.debug.enable": "Enable Debug Window",
+
+    "settings.section.detection": "Detection",
+    "settings.detection.fps": "Capture FPS",
+    "settings.detection.fps_desc": "Screen capture rate.",
+    "settings.detection.confidence": "Confidence Threshold",
+    "settings.detection.confidence_desc": "Min confidence to consider something detected.",
+    "settings.detection.lost_timeout": "Lost Target Timeout (ms)",
+    "settings.detection.lost_timeout_desc": "Time without detection before resetting.",
+    "settings.detection.fish_lost_timeout": "Fish Lost Timeout (ms)",
+    "settings.detection.fish_lost_timeout_desc": "Time bar must disappear before fishing resets.",
+
+    "settings.section.controller": "Controller Tuning",
+    "settings.controller.deadzone": "Deadzone (px)",
+    "settings.controller.deadzone_desc": "Ignored movement range near center.",
+    "settings.controller.prediction": "Enable Prediction",
+    "settings.controller.prediction_desc": "Predicts where the fish is heading.",
+    "settings.controller.smoothing": "Smoothing",
+    "settings.controller.smoothing_desc": "Reduces jitter in controller response.",
+
+    "settings.section.adv_debug": "Advanced Debug",
+    "settings.adv_debug.show_masks": "Show Detection Masks",
+    "settings.adv_debug.show_masks_desc": "Shows raw color masks used by the vision system.",
+
+    "settings.section.diagnostics": "Diagnostics",
+    "settings.diagnostics.test_mouse": "Test Mouse Input",
+    "settings.diagnostics.test_mouse_desc": "Simulates a click to verify mouse input reaches the game.",
+    "settings.diagnostics.result_ok": "✓  Mouse input OK",
+    "settings.diagnostics.result_fail": "✗  Mouse input failed",
+
+    "settings.advanced_warning": "Advanced settings — default values are recommended.",
+
+    "btn.save": "Save",
+    "btn.cancel": "Cancel",
+
+    "calib.bar.instruction": "Click and drag to select the fishing bar area",
+    "calib.bar.detail": "Drag the mouse to create a rectangle around the entire fishing minigame.",
+    "calib.bar.esc": "Press ESC to cancel",
+
+    "calib.water.instruction": "Click on the water where the fishing rod should be cast.",
+    "calib.water.detail": "Single click on the exact water position you want the bot to target.",
+    "calib.water.esc": "Press ESC to cancel",
+
+    "msg.test_mouse_running": "Testing...",
+    "msg.not_calibrated_bar": "Calibrate the fishing bar first.",
+    "msg.not_calibrated_water": "Water position not set — bot will not auto-cast.",
+
+    "settings.basic.disclaimer": "creator: y3levi  •  discord: atelofear"
+}

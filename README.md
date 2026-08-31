@@ -16,11 +16,11 @@
 
 funciona sem injetar nada e sem mexer em processo nenhum, ele só analisa o que aparece na tela e mexe o mouse sozinho. simples assim.
 
-funciona com as varas convencionais e com a **AUTOROD**.
+funciona com as varas convencionais e com a **AUTOROD** (é só uma tag).
 
 ### modos de pesca
 
-- **modo normal** → pras 4 varas comuns do jogo
+- **modo normal** → pras 4 varas comuns do jogo, com o minigame
 - **modo autorod** → específico pra AUTOROD, que não tem minigame
 
 ### como usar
@@ -32,7 +32,11 @@ funciona com as varas convencionais e com a **AUTOROD**.
 
 tem uma tela de configurações lá dentro também, pra ajustar o que precisar.
 
-> pode rodar direto
+<p align="center">
+  <img src="assets/PRINT.png" alt="menu principal" width="80%">
+</p>
+
+> pode rodar direto, sem frescura. não precisa entender nada de tecnologia pra usar.
 
 ### download
 
@@ -63,6 +67,10 @@ works with the regular rods and with **AUTOROD** (just a tag).
 4. let it run and go do something else
 
 there's also a settings screen inside, to tweak whatever you need.
+
+<p align="center">
+  <img src="assets/PRINT.png" alt="main menu" width="80%">
+</p>
 
 > just run it, no need to overthink it.
 
