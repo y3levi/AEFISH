@@ -4,7 +4,7 @@
 #define MyAppName "Anime Expeditions Auto Fishing"
 #define MyAppVersion "1.0.0"
 #define MyAppPublisher "y3levi"
-#define MyAppExeName "Anime_Expeditions_Auto_Fishing.exe"
+#define MyAppExeName "AEFISH.exe"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.

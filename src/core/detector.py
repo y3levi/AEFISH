@@ -57,14 +57,15 @@ class Detector:
         """Run detection on a BGR frame. Returns DetectionResult."""
         result = DetectionResult()
         debug_frame = frame.copy()
+        frame_h, frame_w = frame.shape[:2]
 
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
         if self._fish_cfg.get("enabled", True):
-            self._detect_fish(hsv, result)
+            self._detect_fish(hsv, frame_w, frame_h, result)
 
         if self._zone_cfg.get("enabled", True):
-            self._detect_zone(hsv, result)
+            self._detect_zone(hsv, frame_w, frame_h, result)
 
         result.confidence = self._compute_confidence(result)
 
@@ -73,32 +74,27 @@ class Detector:
 
         return result
 
-    def _detect_fish(self, hsv: np.ndarray, result: DetectionResult) -> None:
-        """Detect fish indicator (bright/white element) using HSV mask + contours."""
-        lower = np.array(self._fish_cfg.get("hsv_lower", [0, 0, 200]))
-        upper = np.array(self._fish_cfg.get("hsv_upper", [180, 40, 255]))
-        min_area = self._fish_cfg.get("min_area", 5)
-        max_area = self._fish_cfg.get("max_area", 3000)
-
+    def _detect_fish(self, hsv: np.ndarray, frame_w: int, frame_h: int, result: DetectionResult) -> None:
+        """Detect fish indicator using unified HSV mask + contours."""
+        # The fish in Anime Expeditions is light blue!
+        lower = np.array(self._fish_cfg.get("hsv_lower", [85, 40, 140]))
+        upper = np.array(self._fish_cfg.get("hsv_upper", [125, 255, 255]))
+        
         mask = cv2.inRange(hsv, lower, upper)
-        # morphological cleanup
-        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
-        mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
-
-        contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        # We don't want MORPH_OPEN because the fish is small
+        contours, _ = cv2.findContours(mask, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 
         best = None
         best_area = 0
-        min_ar = self._fish_cfg.get("min_aspect_ratio", 0.1)
-        max_ar = self._fish_cfg.get("max_aspect_ratio", 10.0)
-
+        
         for cnt in contours:
             area = cv2.contourArea(cnt)
-            if min_area <= area <= max_area:
+            if 10 <= area <= 2500:
                 x, y, w, h = cv2.boundingRect(cnt)
                 aspect_ratio = float(w) / max(1, h)
-                # aspect ratio check
-                if min_ar <= aspect_ratio <= max_ar:
+                
+                # Fish is roughly square
+                if 0.5 <= aspect_ratio <= 2.5:
                     if area > best_area:
                         best = cnt
                         best_area = area
@@ -115,26 +111,32 @@ class Detector:
             result.fish_y = cy
             result.fish_bbox = (x, y, w, h)
 
-    def _detect_zone(self, hsv: np.ndarray, result: DetectionResult) -> None:
+    def _detect_zone(self, hsv: np.ndarray, frame_w: int, frame_h: int, result: DetectionResult) -> None:
         """Detect blue controllable zone using HSV mask + contours."""
-        lower = np.array(self._zone_cfg.get("hsv_lower", [95, 80, 60]))
+        lower = np.array(self._zone_cfg.get("hsv_lower", [85, 40, 60]))
         upper = np.array(self._zone_cfg.get("hsv_upper", [135, 255, 255]))
-        min_area = self._zone_cfg.get("min_area", 50)
-        max_area = self._zone_cfg.get("max_area", 50000)
-
+        
         mask = cv2.inRange(hsv, lower, upper)
-        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (5, 3))
+        # Close to connect split parts of the blue zone
+        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
         mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
 
-        contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        contours, _ = cv2.findContours(mask, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 
         best = None
         best_area = 0
         for cnt in contours:
             area = cv2.contourArea(cnt)
-            if min_area <= area <= max_area and area > best_area:
-                best = cnt
-                best_area = area
+            if area > 100:
+                x, y, w, h = cv2.boundingRect(cnt)
+                # Zone must have reasonable height (at least 5% of frame) and not span entire screen
+                if h < max(3, int(frame_h * 0.05)) or w > frame_w * 0.75:
+                    continue
+                # Zone is wide
+                if w > h * 2:
+                    if area > best_area:
+                        best = cnt
+                        best_area = area
 
         if best is not None:
             x, y, w, h = cv2.boundingRect(best)
@@ -144,11 +146,12 @@ class Detector:
             result.zone_bbox = (x, y, w, h)
 
     def _compute_confidence(self, result: DetectionResult) -> float:
-        """Compute a confidence score 0.0-1.0 based on what was detected."""
+        """Compute a confidence score based on minigame elements detection."""
         if result.both_detected:
-            return 1.0
-        elif result.fish_detected or result.zone_detected:
-            return 0.5
+            # Enforce vertical alignment! The fish must be inside/near the zone vertically.
+            zone_y_center = result.zone_bbox[1] + (result.zone_bbox[3] // 2)
+            if abs(result.fish_y - zone_y_center) < 35:
+                return 1.0
         return 0.0
 
     def _draw_debug(self, frame: np.ndarray, result: DetectionResult) -> None:

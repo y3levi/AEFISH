@@ -194,29 +194,33 @@ class FishingEngine:
             m = _Mouse()
             
             logger.info("casting phase started")
-            logger.info(f"target water coordinates: {pos['x']},{pos['y']}")
-            logger.info(f"mouse position before move: {m.position}")
             
             # ensure focused
             focused = self._focus_roblox()
-            logger.info(f"focus/preparation result: {focused}")
-            self._interruptible_sleep(0.4)
+            self._interruptible_sleep(0.3)
             if self._stop_event.is_set():
                 return
             
             # move cursor
             m.position = (int(pos["x"]), int(pos["y"]))
-            self._interruptible_sleep(0.2)
-            logger.info(f"mouse position after move: {m.position}")
+            self._interruptible_sleep(0.15)
             
-            # prevent release bug
+            if focused:
+                # it was out of focus, do a quick focus click first
+                logger.info("focus click")
+                m.press(Button.left)
+                time.sleep(0.05)
+                m.release(Button.left)
+                time.sleep(0.2)
+            
+            # clean tap click
+            m.release(Button.left)
+            time.sleep(0.04)
+            logger.info("mouse click")
+            m.press(Button.left)
+            time.sleep(0.08)
             m.release(Button.left)
             time.sleep(0.05)
-            
-            # mouse click
-            logger.info("mouse click")
-            m.click(Button.left, 1)
-            time.sleep(0.1)
             
             logger.info("cast completion")
         except Exception as e:
@@ -280,6 +284,7 @@ class FishingEngine:
 
         cast_time: float = 0.0
         fish_lost_since: Optional[float] = None
+        consecutive_detects: int = 0
 
         try:
             while not self._stop_event.is_set():
@@ -289,9 +294,10 @@ class FishingEngine:
                     self._state.set_status(AppStatus.CASTING)
                     self._click_water(water_pos)
                     cast_time = time.monotonic()
+                    consecutive_detects = 0
                     self._phase = "WAITING"
                     self._state.set_status(AppStatus.WAITING_FOR_MINIGAME)
-                    self._interruptible_sleep(0.5)
+                    self._interruptible_sleep(1.0)
                     continue
 
                 frame = self._capture.capture()
@@ -312,27 +318,36 @@ class FishingEngine:
                         pass
 
                 if self._phase == "WAITING":
+                    # minimum cast settling delay
+                    if time.monotonic() - cast_time < 1.5:
+                        time.sleep(0.05)
+                        continue
+
                     if detected:
-                        if simple_rod:
-                            # bite detected
-                            logger.info("bite detected")
-                            self._click_water(water_pos)
-                            
-                            # recast sequence
+                        consecutive_detects += 1
+                        if consecutive_detects >= 2:
+                            if simple_rod:
+                                # bite detected
+                                logger.info("bite detected")
+                                self._click_water(water_pos)
+                                
+                                # recast sequence
+                                self._state.set_status(AppStatus.RECAST)
+                                self._interruptible_sleep(2.0)
+                                self._phase = "CASTING"
+                            else:
+                                self._phase = "FISHING"
+                                fish_lost_since = None
+                                self._state.set_status(AppStatus.FISHING)
+                    else:
+                        consecutive_detects = 0
+                        if time.monotonic() - cast_time > recast_timeout_s:
+                            # recast timeout
+                            logger.warning("recast timeout")
+                            self._mouse.emergency_release() if self._mouse else None
                             self._state.set_status(AppStatus.RECAST)
-                            self._interruptible_sleep(2.0)
+                            self._interruptible_sleep(recast_cooldown_s)
                             self._phase = "CASTING"
-                        else:
-                            self._phase = "FISHING"
-                            fish_lost_since = None
-                            self._state.set_status(AppStatus.FISHING)
-                    elif time.monotonic() - cast_time > recast_timeout_s:
-                        # recast timeout
-                        logger.warning("recast timeout")
-                        self._mouse.emergency_release() if self._mouse else None
-                        self._state.set_status(AppStatus.RECAST)
-                        self._interruptible_sleep(recast_cooldown_s)
-                        self._phase = "CASTING"
 
                 elif self._phase == "FISHING":
                     if detected:
@@ -362,9 +377,13 @@ class FishingEngine:
 
                 elif self._phase == "DETECTING":
                     if detected:
-                        self._phase = "FISHING"
-                        fish_lost_since = None
-                        self._state.set_status(AppStatus.FISHING)
+                        consecutive_detects += 1
+                        if consecutive_detects >= 2:
+                            self._phase = "FISHING"
+                            fish_lost_since = None
+                            self._state.set_status(AppStatus.FISHING)
+                    else:
+                        consecutive_detects = 0
 
                 # normal loop sleep
                 elapsed = time.monotonic() - loop_start

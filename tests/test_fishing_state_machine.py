@@ -140,17 +140,17 @@ def test_edge_margin_clamp():
     from src.core.controller import Controller, Action
     cfg = {
         "detection": {"deadzone": 10},
-        "controller": {"prediction": False, "smoothing": 0.0, "edge_margin": 15}
+        "controller": {"prediction": False, "smoothing": 0.0}
     }
     ctrl = Controller(cfg)
     
-    # zone_left <= 15 -> forced hold
-    action = ctrl.update(fish_x=5, zone_left=10, zone_right=80, timestamp=1.0)
+    # target right of zone
+    action = ctrl.update(fish_x=90, zone_left=10, zone_right=80, timestamp=1.0)
     assert action == Action.HOLD
     
     ctrl.reset()
     
-    # zone_left > 15 -> normal logic
+    # target left of zone
     action = ctrl.update(fish_x=5, zone_left=20, zone_right=80, timestamp=1.1)
     assert action == Action.RELEASE
 

@@ -1,12 +1,19 @@
 """localization module."""
 import json
+import sys
 from pathlib import Path
 from typing import Callable, List
 
 _strings: dict = {}
 _callbacks: List[Callable] = []
 _current_lang: str = "en"
-_locales_dir = Path(__file__).parent.parent / "locales"
+
+def _get_locales_dir() -> Path:
+    if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
+        return Path(getattr(sys, '_MEIPASS')) / "src" / "locales"
+    return Path(__file__).parent.parent / "locales"
+
+_locales_dir = _get_locales_dir()
 
 
 def load(lang: str) -> None:

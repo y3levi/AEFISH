@@ -26,7 +26,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='Anime_Expeditions_Auto_Fishing',
+    name='AEFISH',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -39,5 +39,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['assets/Toki1ICO.ico'],
+    icon=['Y:/dev/AEFISH/assets/Toki1ICO.ico'],
 )

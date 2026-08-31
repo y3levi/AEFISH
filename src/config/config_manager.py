@@ -125,6 +125,9 @@ class ConfigManager:
             return copy.deepcopy(self._profile)
 
     def _resolve_profiles_dir(self) -> Path:
+        import sys
+        if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
+            return Path(getattr(sys, '_MEIPASS')) / "src" / "config" / "profiles"
         return Path(__file__).parent / "profiles"
 
     def _load_profile_unlocked(self, name: str) -> dict:

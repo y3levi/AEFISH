@@ -22,6 +22,13 @@ FONT_MAIN = 'Segoe UI'
 
 # asset paths
 import os
-ASSETS_DIR = os.path.join(os.path.dirname(__file__), '..', '..', 'assets')
+import sys
+
+def get_base_dir() -> str:
+    if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
+        return getattr(sys, '_MEIPASS')
+    return os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+
+ASSETS_DIR = os.path.join(get_base_dir(), 'assets')
 ICON_MAIN = os.path.join(ASSETS_DIR, 'Toki1ICO.ico')
 ICON_SETTINGS = os.path.join(ASSETS_DIR, 'CloudICO.ico')

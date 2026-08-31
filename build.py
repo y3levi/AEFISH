@@ -42,14 +42,15 @@ def clean() -> None:
 
 
 def build(onefile: bool = False) -> None:
+    icon = Path(ICON_PATH).resolve()
+
     args = [
         sys.executable, "-m", "PyInstaller",
-        "--name", APP_NAME.replace(" ", "_"),
+        "--name", "AEFISH",
         "--windowed",
         "--noconfirm",
     ]
 
-    icon = Path(ICON_PATH)
     if icon.exists():
         args += ["--icon", str(icon)]
 
